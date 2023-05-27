@@ -19,7 +19,7 @@ export PROJECT_DIR="/global/scratch/users/$USER/cautious_extrapolation/cautious_
 
 run_singularity ()
 {
-singularity exec --nv --writable-tmpfs -B /usr/lib64 -B /var/lib/dcv-gl --overlay /global/scratch/users/katiekang1998/overlay-50G-10M.ext3:ro /global/scratch/users/katiekang1998/singularity/cudagl11.5-cudnn8-devel-ubuntu18.04.sif /bin/bash -c "
+singularity exec --nv --userns --writable-tmpfs -B /usr/lib64 -B /var/lib/dcv-gl --overlay /global/scratch/users/katiekang1998/overlay-50G-10M.ext3:ro /global/scratch/users/katiekang1998/singularity/cudagl11.5-cudnn8-devel-ubuntu18.04.sif /bin/bash -c "
     source /ext3/env.sh
     source ~/.bashrc
     export WANDB_API_KEY=54a52e9f0fbaeef9f587192e3ee5425a7c7e2995
