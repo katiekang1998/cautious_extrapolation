@@ -25,7 +25,7 @@ singularity exec --nv --userns --writable-tmpfs -B /usr/lib64 -B /var/lib/dcv-gl
     export WANDB_API_KEY=54a52e9f0fbaeef9f587192e3ee5425a7c7e2995
     conda activate cifar10
     export XLA_FLAGS=--xla_gpu_force_compilation_parallelism=1
-    XLA_PYTHON_CLIENT_PREALLOCATE=false python $PROJECT_DIR/CIFAR10/trainer.py \
+    XLA_PYTHON_CLIENT_PREALLOCATE=false python $PROJECT_DIR/CIFAR10/train.py \
         --data-loc=brc \
         --seed=$1 \
         --train_type=xent \
