@@ -16,6 +16,6 @@ for RUN_NAME in xent_seed0_2023_05_26_19_49_28 xent_seed1_2023_05_26_19_49_29 xe
 do 
     for CORRUPTION_TYPE in impulse_noise shot_noise defocus_blur motion_blur speckle_noise
     do
-        CUDA_VISIBLE_DEVICES=1 python ../cautious_extrapolation/CIFAR10/eval.py --run-name=$RUN_NAME --corruption-type=$CORRUPTION_TYPE --ts=True
+        CUDA_VISIBLE_DEVICES=1 python ../cautious_extrapolation/CIFAR10/eval.py --run-name=$RUN_NAME --corruption-type=$CORRUPTION_TYPE
     done
 done

@@ -4,7 +4,7 @@ DATA_PATHS = {}
 DATA_PATHS["nfs"]= {}
 DATA_PATHS["nfs"]["CIFAR10C"] = "/nfs/kun2/users/katiekang/pytorch_resnet_cifar10/data/CIFAR-10-C/"
 DATA_PATHS["nfs"]["CIFAR10"] = "/nfs/kun2/users/katiekang/pytorch_resnet_cifar10/data/"
-DATA_PATHS["nfs"]["poverty"] = "/nfs/kun2/users/katiekang/pytorch_resnet_cifar10/data/"
+DATA_PATHS["nfs"]["poverty"] = "/nfs/kun2/users/katiekang/"
 
 
 

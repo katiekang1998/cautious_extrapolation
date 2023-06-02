@@ -143,13 +143,19 @@ class ModelWithTemperature(nn.Module):
         return self.temperature
     
 
-def get_imagenet_features(loader):
+def get_imagenet_features(loader, poverty=False):
     resnet18 = torchvision.models.resnet18(pretrained=True)
     resnet18.cuda()
     resnet18.eval()
 
     features_all = []
-    for i, (input, target) in enumerate(loader):
+    for i, batch in enumerate(loader):
+        if not poverty:
+            input, target = batch
+        else:
+            input, target, metadata = batch
+            input = input[:,:3]
+
         # x = torch.from_numpy(np.resize(input.numpy(), (128, 3, 256, 256)))
         x = input.cuda()
         x = resnet18.conv1(x)

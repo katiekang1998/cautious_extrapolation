@@ -22,7 +22,7 @@ from cautious_extrapolation.data_paths import DATA_PATHS
 
 
 parser = argparse.ArgumentParser(description='CIFAR10 Training')
-parser.add_argument('--seed', dest='seed', type=int, default=48)
+parser.add_argument('--seed', dest='seed', type=int, default=0)
 parser.add_argument('-j', '--workers', default=4, type=int, metavar='N',
                     help='number of data loading workers (default: 4)')
 parser.add_argument('--epochs', default=200, type=int, metavar='N',
@@ -179,14 +179,14 @@ def train(train_loader, model, criterion, optimizer, epoch):
     # switch to train mode
     model.train()
 
-    for i, (input, target) in enumerate(train_loader):
+    for i, (input_var, target) in enumerate(train_loader):
 
 
         target = target.cuda()
-        input = input.cuda()
+        input_var = input_var.cuda()
 
         # compute output
-        output = model(input)
+        output = model(input_var)
         loss = criterion(output, target)
 
         # compute gradient and do SGD step
@@ -198,8 +198,8 @@ def train(train_loader, model, criterion, optimizer, epoch):
         loss = loss.float()
 
         acc = accuracy(output.data, target, output.size(1)>10)
-        losses.update(loss.item(), input.size(0))
-        accs.update(acc.item(), input.size(0))
+        losses.update(loss.item(), input_var.size(0))
+        accs.update(acc.item(), input_var.size(0))
 
         # measure elapsed time
 
@@ -224,12 +224,12 @@ def validate(val_loader, model, criterion, epoch, name):
     model.eval()
 
     with torch.no_grad():
-        for i, (input, target) in enumerate(val_loader):
+        for i, (input_var, target) in enumerate(val_loader):
             target = target.cuda()
-            input = input.cuda()
+            input_var = input_var.cuda()
 
             # compute output
-            output = model(input)
+            output = model(input_var)
             loss = criterion(output, target)
 
             output = output.float()
@@ -237,8 +237,8 @@ def validate(val_loader, model, criterion, epoch, name):
 
             # measure accuracy and record loss
             acc = accuracy(output.data, target, output.size(1)>10)
-            losses.update(loss.item(), input.size(0))
-            accs.update(acc.item(), input.size(0))
+            losses.update(loss.item(), input_var.size(0))
+            accs.update(acc.item(), input_var.size(0))
 
             # measure elapsed time
 
