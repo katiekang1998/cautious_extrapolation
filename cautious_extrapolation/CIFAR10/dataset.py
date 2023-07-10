@@ -11,7 +11,7 @@ class CIFAR10C(Dataset):
         self.labels = labels[10000*corruption_level: 10000*(corruption_level+1)]
 
         self.transform = transform
-
+ 
 
     def __len__(self):
         return len(self.labels)
