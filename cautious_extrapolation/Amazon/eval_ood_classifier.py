@@ -52,6 +52,23 @@ ood_data1 = dataset.get_subset(
     transform = transform,
 )
 
+class OodDataset(torch.utils.data.Dataset):
+    def __init__(self, ood_data):
+        self.ood_data = ood_data
+
+        self.subsampled_idxs = np.load("data/ood1_subsampled_idxs.npy")
+
+    def __len__(self):
+        return len(self.subsampled_idxs)
+
+    def __getitem__(self, idx):
+        image = self.ood_data[self.subsampled_idxs[idx]][0]
+        label = 1
+
+        return image, label, 0
+
+ood_data1 = OodDataset(ood_data1)
+
 val_loader = torch.utils.data.DataLoader(
     val_data,
     batch_size=20, shuffle=False,
@@ -82,11 +99,14 @@ def validate(loader, model):
 
 
 outputs = {}
-outputs_all = validate(val_loader, model)
-outputs[0] = outputs_all
 
 outputs_all = validate(ood_loader1, model)
 outputs[1] = outputs_all
+
+outputs_all = validate(val_loader, model)
+outputs[0] = outputs_all
+
+
 
 save_name = os.path.join(dir_path, "data", args.run_name, "outputs.pkl")
 

@@ -58,7 +58,7 @@ def main():
     else:
         save_dir = args.save_dir+now.strftime("_%Y_%m_%d_%H_%M_%S")
 
-    wandb.init(project="CIFAR10", name=save_dir)
+    wandb.init(project="OfficeHome", name=save_dir)
     wandb.config.update(args)
 
     dir_path = os.path.dirname(os.path.realpath(__file__))

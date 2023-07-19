@@ -23,6 +23,7 @@ from sklearn.model_selection import train_test_split
 parser = argparse.ArgumentParser(description='UTKFace Eval')
 parser.add_argument('--run-name', dest='run_name',
                     type=str, default="")
+parser.add_argument('--corruption-type', dest='corruption_type', default='gaussian_blur')
 parser.add_argument('--data-loc', dest='data_loc', default='nfs')
 
 args = parser.parse_args()
@@ -58,7 +59,7 @@ val_loader = torch.utils.data.DataLoader(
 ood_loaders = []
 for corruption_level in range(5):
     ood_loader = torch.utils.data.DataLoader(
-        UTKDataset(val_dataFrame, severity=corruption_level+1, transform=normalize),
+        UTKDataset(val_dataFrame, severity=corruption_level+1, transform=normalize, corruption_type=args.corruption_type),
         batch_size=64, shuffle=False,
         num_workers=4)
     ood_loaders.append(ood_loader)
@@ -96,7 +97,7 @@ for corruption_level in range(5):
     results[corruption_level+1] = outputs_all
 
 
-save_name = os.path.join(dir_path, "data", args.run_name, "outputs.pkl")
+save_name = os.path.join(dir_path, "data", args.run_name, "outputs_"+args.corruption_type+".pkl")
 
 with open(save_name, 'wb') as f:
     pickle.dump(results, f)

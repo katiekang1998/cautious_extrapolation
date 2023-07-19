@@ -29,7 +29,7 @@ parser.add_argument('-j', '--workers', default=4, type=int, metavar='N',
 parser.add_argument('--epochs', default=3, type=int, metavar='N',
                     help='number of total epochs to run')
 parser.add_argument('-b', '--batch-size', default=20, type=int,
-                    metavar='N', help='mini-batch size (default: 64)')
+                    metavar='N', help='mini-batch size (default: 20)')
 parser.add_argument('--print-freq', '-p', default=50, type=int,
                     metavar='N', help='print frequency (default: 50)')
 parser.add_argument('--save-dir', dest='save_dir',
@@ -81,19 +81,12 @@ def main():
         transform = transform,
     )
 
-    # ood_data2 = dataset.get_subset(
-    #     "test",
-    #     transform = transform,
-    # )
-
     model = models.initialize_bert_based_model(2)
     model = model.cuda()
     criterion = nn.CrossEntropyLoss().cuda()
 
-
-
     val_ood_dataset = ValOodDataset(val_data, ood_data1)
-    train_val_ood_dataset, val_val_ood_dataset = torch.utils.data.random_split(val_ood_dataset, [0.8, 0.2])
+    train_val_ood_dataset, val_val_ood_dataset = torch.utils.data.random_split(val_ood_dataset, [0.9, 0.1])
     train_val_ood_loader = torch.utils.data.DataLoader(
         train_val_ood_dataset, batch_size=20, shuffle=True,
         num_workers=1, pin_memory=True, sampler=None)
@@ -125,17 +118,19 @@ class ValOodDataset(torch.utils.data.Dataset):
         self.val_data = val_data
         self.ood_data = ood_data
 
-        self.num_points_per_dataset = min(len(val_data), len(ood_data))
+        self.subsampled_idxs = np.load("data/ood1_subsampled_idxs.npy")
+
+        self.shuffled_idxs = np.random.permutation(len(val_data))
 
     def __len__(self):
-        return 2*self.num_points_per_dataset
+        return 2*len(self.subsampled_idxs)
 
     def __getitem__(self, idx):
-        if idx < self.num_points_per_dataset:
-            image = self.val_data[idx][0]
+        if idx < len(self.subsampled_idxs):
+            image = self.val_data[self.shuffled_idxs[idx]][0]
             label = 0
         else:
-            image = self.ood_data[idx - self.num_points_per_dataset][0]
+            image = self.ood_data[self.subsampled_idxs[idx - len(self.subsampled_idxs)]][0]
             label = 1
 
         return image, label

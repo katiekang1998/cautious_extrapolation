@@ -160,7 +160,7 @@ def get_imagenet_features(loader, poverty=False, UTKFace=False):
             input, target = batch
 
         # x = torch.from_numpy(np.resize(input.numpy(), (128, 3, 256, 256)))
-        x = input.cuda()
+        x = input.cuda().float()
         x = resnet18.conv1(x)
         x = resnet18.bn1(x)
         x = resnet18.relu(x)

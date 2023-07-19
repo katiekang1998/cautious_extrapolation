@@ -45,19 +45,21 @@ model.load_state_dict(checkpoint['state_dict'])
 model.cuda()
 
 train_dataset, val_dataset, ood_datasets = get_datasets(DATA_PATHS[args.data_loc]["OfficeHome"])
-    
+
+
+loaders = []
 val_loader = torch.utils.data.DataLoader(
     val_dataset,
-    batch_size=32, shuffle=True,
+    batch_size=32, shuffle=False,
     num_workers=args_train_dict['workers'], pin_memory=True)
+loaders.append(val_loader)
 
-ood_loaders = []
 for ood_dataset in ood_datasets:
     ood_loader = torch.utils.data.DataLoader(
         ood_dataset,
-        batch_size=32, shuffle=True,
+        batch_size=32, shuffle=False,
         num_workers=args_train_dict['workers'], pin_memory=True)
-    ood_loaders.append(ood_loader)
+    loaders.append(ood_loader)
 
 
 def validate(loader, model, temperature):
@@ -78,22 +80,14 @@ def validate(loader, model, temperature):
 
 
 results = {}
-if args.ts:
-    assert(args_train_dict["train_type"] == "xent")
-    temperature = np.load(os.path.join(dir_path, "data", args.run_name, "temp.npy"))
-else:
-    temperature=[]
-outputs_all = validate(val_loader, model, temperature)
-results[0] = outputs_all
-
-for ood_level in range(3):
+for loader_idx in range(4):
     if args.ts:
         assert(args_train_dict["train_type"] == "xent")
-        temperature = np.load(os.path.join(dir_path, "data", args.run_name, "temp_"+str(ood_level)+".npy"))
+        temperature = np.load(os.path.join(dir_path, "data", args.run_name, "temp_"+str(loader_idx)+".npy"))
     else:
         temperature=[]
-    outputs_all = validate(ood_loaders[ood_level], model, temperature)
-    results[ood_level+1] = outputs_all
+    outputs_all = validate(loaders[loader_idx], model, temperature)
+    results[loader_idx] = outputs_all
 
 
 if args.ts:
