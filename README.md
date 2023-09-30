@@ -16,6 +16,7 @@ To download the datasets needed for training, please follow the directions speci
 - [SkinLesionPixels](https://github.com/fregu856/regression_uncertainty)
 - [UTKFace](https://www.kaggle.com/datasets/nipunarora8/age-gender-and-ethnicity-face-data-csv)
 - [Amazon](https://wilds.stanford.edu/get_started/)
+
 Update `cautious_extrapolation/data_paths.py` to include the directory paths in which the datasets were downloaded.
 ## Usage
 This codebase is organized such that each dataset is associated with a folder inside `cautious_extrapolation\`. To train a model on a particular dataset, navigate to the folder associated with the  dataset, and run:
