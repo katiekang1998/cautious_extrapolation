@@ -1,6 +1,8 @@
 # Deep Neural Networks Tend To Extrapolate Predictably
-Code for reproducing the experiments in [Deep Neural Networks Tend To Extrapolate Predictably]().
+Code for reproducing the experiments in [Deep Neural Networks Tend To Extrapolate Predictably]().\
 ![](teaser.png)
+
+
 ## Setup
 To install the necessary packages for this codebase, run:
 ```
@@ -27,7 +29,9 @@ To evaluate the model on the holdout and OOD datasets, run:
 ```
 python eval.py --run-name=[run name] [other args]
 ```
-To reproduce the figures in our paper, please see `plot.ipynb` and `analyze.ipynb`.
+To reproduce the figures in our paper, please see `plot.ipynb` and `analyze.ipynb`.\
+
+Code for BREEDS living-17 and non-living-26 are coming soon!
 ## Acknowledgements
 The codebase is built on top of multiple publicly available repos:
 - [pytorch_resnet_cifar10](https://github.com/akamaster/pytorch_resnet_cifar10)
